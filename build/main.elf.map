@@ -1008,9 +1008,9 @@ Discarded input sections
  .data          0x00000000        0x0 libFreeRTOS.a(heap_4.c.obj)
  .data          0x00000000        0x0 libFreeRTOS.a(list.c.obj)
  .bss           0x00000000        0x0 libFreeRTOS.a(list.c.obj)
- .text          0x00000000        0x0 C:\Users\JOSECA~1\AppData\Local\Temp\ccabMWUe.o
- .data          0x00000000        0x0 C:\Users\JOSECA~1\AppData\Local\Temp\ccabMWUe.o
- .bss           0x00000000        0x0 C:\Users\JOSECA~1\AppData\Local\Temp\ccabMWUe.o
+ .text          0x00000000        0x0 C:\Users\JOSECA~1\AppData\Local\Temp\ccwKd3m8.o
+ .data          0x00000000        0x0 C:\Users\JOSECA~1\AppData\Local\Temp\ccwKd3m8.o
+ .bss           0x00000000        0x0 C:\Users\JOSECA~1\AppData\Local\Temp\ccwKd3m8.o
  .data          0x00000000        0x0 c:/progra~2/gnuarm~1/102020~1/bin/../lib/gcc/arm-none-eabi/10.2.1/thumb/v6-m/nofp\libgcc.a(_dvmd_tls.o)
  .bss           0x00000000        0x0 c:/progra~2/gnuarm~1/102020~1/bin/../lib/gcc/arm-none-eabi/10.2.1/thumb/v6-m/nofp\libgcc.a(_dvmd_tls.o)
  .text          0x00000000        0x0 c:/progra~2/gnuarm~1/102020~1/bin/../lib/gcc/arm-none-eabi/10.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libg.a(lib_a-atoi.o)
@@ -1219,7 +1219,7 @@ LOAD c:/progra~2/gnuarm~1/102020~1/bin/../lib/gcc/arm-none-eabi/10.2.1/../../../
 .boot2          0x10000000      0x100
                 0x10000000                __boot2_start__ = .
  *(.boot2)
- .boot2         0x10000000      0x100 C:\Users\JOSECA~1\AppData\Local\Temp\ccabMWUe.o
+ .boot2         0x10000000      0x100 C:\Users\JOSECA~1\AppData\Local\Temp\ccwKd3m8.o
                 0x10000100                __boot2_end__ = .
                 0x00000001                ASSERT (((__boot2_end__ - __boot2_start__) == 0x100), ERROR: Pico second stage bootloader must be 256 bytes in size)
 
@@ -2419,7 +2419,7 @@ LOAD c:/progra~2/gnuarm~1/102020~1/bin/../lib/gcc/arm-none-eabi/10.2.1/../../../
                 0x20041000                __scratch_y_end__ = .
                 0x1000ab20                __scratch_y_source__ = LOADADDR (.scratch_y)
 
-.bss            0x20000710    0x22264
+.bss            0x20000710    0x22714
                 0x20000710                . = ALIGN (0x4)
                 0x20000710                __bss_start__ = .
  *(SORT_BY_ALIGNMENT(SORT_BY_NAME(.bss*)))
@@ -2434,90 +2434,90 @@ LOAD c:/progra~2/gnuarm~1/102020~1/bin/../lib/gcc/arm-none-eabi/10.2.1/../../../
                 0x20000958                pxCurrentTCB
  .bss           0x20000984       0x3c libFreeRTOS.a(timers.c.obj)
  .bss           0x200009c0    0x186c0 libFreeRTOS.a(heap_4.c.obj)
- .bss.adc       0x20019080     0x9088 CMakeFiles/main.dir/main.c.obj
+ .bss.adc       0x20019080     0x9538 CMakeFiles/main.dir/main.c.obj
                 0x20019080                adc
  .bss.alarm_callbacks
-                0x20022108       0x10 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/hardware_timer/timer.c.obj
- .bss.amp_ch1   0x20022118        0x4 CMakeFiles/main.dir/main.c.obj
-                0x20022118                amp_ch1
+                0x200225b8       0x10 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/hardware_timer/timer.c.obj
+ .bss.amp_ch1   0x200225c8        0x4 CMakeFiles/main.dir/main.c.obj
+                0x200225c8                amp_ch1
  .bss.app_instruction_queue
-                0x2002211c        0x4 CMakeFiles/main.dir/main.c.obj
-                0x2002211c                app_instruction_queue
+                0x200225cc        0x4 CMakeFiles/main.dir/main.c.obj
+                0x200225cc                app_instruction_queue
  .bss.configured_freq
-                0x20022120       0x28 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.obj
+                0x200225d0       0x28 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/hardware_clocks/clocks.c.obj
  .bss.dac_values
-                0x20022148      0x192 CMakeFiles/main.dir/main.c.obj
-                0x20022148                dac_values
- *fill*         0x200222da        0x2 
+                0x200225f8      0x192 CMakeFiles/main.dir/main.c.obj
+                0x200225f8                dac_values
+ *fill*         0x2002278a        0x2 
  .bss.default_alarm_pool_entry_ids_high
-                0x200222dc       0x10 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/common/pico_time/time.c.obj
+                0x2002278c       0x10 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/common/pico_time/time.c.obj
  .bss.default_alarm_pool_heap_nodes
-                0x200222ec       0x30 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/common/pico_time/time.c.obj
- .bss.dma_ch    0x2002231c        0x4 CMakeFiles/main.dir/main.c.obj
-                0x2002231c                dma_ch
+                0x2002279c       0x30 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/common/pico_time/time.c.obj
+ .bss.dma_ch    0x200227cc        0x4 CMakeFiles/main.dir/main.c.obj
+                0x200227cc                dma_ch
  .bss.dma_config
-                0x20022320        0x4 CMakeFiles/main.dir/main.c.obj
-                0x20022320                dma_config
- .bss.drivers   0x20022324        0x4 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/pico_stdio/stdio.c.obj
+                0x200227d0        0x4 CMakeFiles/main.dir/main.c.obj
+                0x200227d0                dma_config
+ .bss.drivers   0x200227d4        0x4 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/pico_stdio/stdio.c.obj
  .bss.end_probe_semphr
-                0x20022328        0x4 CMakeFiles/main.dir/main.c.obj
-                0x20022328                end_probe_semphr
- .bss.filter    0x2002232c        0x4 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/pico_stdio/stdio.c.obj
- .bss.pools     0x20022330       0x10 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/common/pico_time/time.c.obj
+                0x200227d8        0x4 CMakeFiles/main.dir/main.c.obj
+                0x200227d8                end_probe_semphr
+ .bss.filter    0x200227dc        0x4 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/pico_stdio/stdio.c.obj
+ .bss.pools     0x200227e0       0x10 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/common/pico_time/time.c.obj
  .bss.qt_comprobe_con
-                0x20022340        0x4 CMakeFiles/main.dir/main.c.obj
-                0x20022340                qt_comprobe_con
- .bss.screen    0x20022344      0x400 CMakeFiles/main.dir/main.c.obj
-                0x20022344                screen
- .bss.sd_table  0x20022744      0x100 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/pico_double/double_init_rom.c.obj
-                0x20022744                sd_table
+                0x200227f0        0x4 CMakeFiles/main.dir/main.c.obj
+                0x200227f0                qt_comprobe_con
+ .bss.screen    0x200227f4      0x400 CMakeFiles/main.dir/main.c.obj
+                0x200227f4                screen
+ .bss.sd_table  0x20022bf4      0x100 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/pico_double/double_init_rom.c.obj
+                0x20022bf4                sd_table
  .bss.serial_mutex
-                0x20022844        0x4 CMakeFiles/main.dir/main.c.obj
-                0x20022844                serial_mutex
+                0x20022cf4        0x4 CMakeFiles/main.dir/main.c.obj
+                0x20022cf4                serial_mutex
  .bss.sf_clz_func
-                0x20022848        0x4 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/pico_float/float_init_rom.c.obj
-                0x20022848                sf_clz_func
- .bss.sf_table  0x2002284c      0x100 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/pico_float/float_init_rom.c.obj
-                0x2002284c                sf_table
+                0x20022cf8        0x4 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/pico_float/float_init_rom.c.obj
+                0x20022cf8                sf_clz_func
+ .bss.sf_table  0x20022cfc      0x100 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/pico_float/float_init_rom.c.obj
+                0x20022cfc                sf_table
  .bss.status_queue
-                0x2002294c        0x4 CMakeFiles/main.dir/main.c.obj
-                0x2002294c                status_queue
+                0x20022dfc        0x4 CMakeFiles/main.dir/main.c.obj
+                0x20022dfc                status_queue
  .bss.target_hi
-                0x20022950       0x10 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/hardware_timer/timer.c.obj
+                0x20022e00       0x10 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/hardware_timer/timer.c.obj
  .bss.uart_char_to_line_feed
-                0x20022960        0x4 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/hardware_uart/uart.c.obj
-                0x20022960                uart_char_to_line_feed
+                0x20022e10        0x4 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/hardware_uart/uart.c.obj
+                0x20022e10                uart_char_to_line_feed
  .bss.uart_instance
-                0x20022964        0x4 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/pico_stdio_uart/stdio_uart.c.obj
- .bss._claimed  0x20022968        0x2 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/hardware_dma/dma.c.obj
+                0x20022e14        0x4 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/pico_stdio_uart/stdio_uart.c.obj
+ .bss._claimed  0x20022e18        0x2 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/hardware_dma/dma.c.obj
  .bss.index_dac
-                0x2002296a        0x2 CMakeFiles/main.dir/main.c.obj
-                0x2002296a                index_dac
- .bss.claimed   0x2002296c        0x1 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/hardware_timer/timer.c.obj
+                0x20022e1a        0x2 CMakeFiles/main.dir/main.c.obj
+                0x20022e1a                index_dac
+ .bss.claimed   0x20022e1c        0x1 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/hardware_timer/timer.c.obj
  .bss.irq_hander_chain_free_slot_head
-                0x2002296d        0x1 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/hardware_irq/irq.c.obj
+                0x20022e1d        0x1 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/hardware_irq/irq.c.obj
  .bss.n_samples
-                0x2002296e        0x1 CMakeFiles/main.dir/main.c.obj
-                0x2002296e                n_samples
+                0x20022e1e        0x1 CMakeFiles/main.dir/main.c.obj
+                0x20022e1e                n_samples
  .bss.resistor_value
-                0x2002296f        0x1 CMakeFiles/main.dir/main.c.obj
-                0x2002296f                resistor_value
+                0x20022e1f        0x1 CMakeFiles/main.dir/main.c.obj
+                0x20022e1f                resistor_value
  .bss.timer_callbacks_pending
-                0x20022970        0x1 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/hardware_timer/timer.c.obj
- .bss.type      0x20022971        0x1 CMakeFiles/main.dir/main.c.obj
-                0x20022971                type
- .bss.x.5       0x20022972        0x1 CMakeFiles/main.dir/main.c.obj
- .bss.y.4       0x20022973        0x1 CMakeFiles/main.dir/main.c.obj
+                0x20022e20        0x1 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/hardware_timer/timer.c.obj
+ .bss.type      0x20022e21        0x1 CMakeFiles/main.dir/main.c.obj
+                0x20022e21                type
+ .bss.x.5       0x20022e22        0x1 CMakeFiles/main.dir/main.c.obj
+ .bss.y.4       0x20022e23        0x1 CMakeFiles/main.dir/main.c.obj
  *(COMMON)
-                0x20022974                . = ALIGN (0x4)
-                0x20022974                __bss_end__ = .
+                0x20022e24                . = ALIGN (0x4)
+                0x20022e24                __bss_end__ = .
 
-.heap           0x20022974      0x800
-                0x20022974                __end__ = .
-                0x20022974                end = __end__
+.heap           0x20022e24      0x800
+                0x20022e24                __end__ = .
+                0x20022e24                end = __end__
  *(.heap*)
- .heap          0x20022974      0x800 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/pico_standard_link/crt0.S.obj
-                0x20023174                __HeapLimit = .
+ .heap          0x20022e24      0x800 CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/pico_standard_link/crt0.S.obj
+                0x20023624                __HeapLimit = .
 
 .stack1_dummy   0x20040000        0x0
  *(.stack1*)
@@ -2587,7 +2587,7 @@ LOAD CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_co
 LOAD CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/hardware_adc/adc.c.obj
 LOAD CMakeFiles/main.dir/C_/Users/JoseCarlos/Desktop/Sistema/pico-sdk/src/rp2_common/hardware_spi/spi.c.obj
 LOAD libFreeRTOS.a
-LOAD C:\Users\JOSECA~1\AppData\Local\Temp\ccabMWUe.o
+LOAD C:\Users\JOSECA~1\AppData\Local\Temp\ccwKd3m8.o
 LOAD c:/progra~2/gnuarm~1/102020~1/bin/../lib/gcc/arm-none-eabi/10.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++.a
 LOAD c:/progra~2/gnuarm~1/102020~1/bin/../lib/gcc/arm-none-eabi/10.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libm.a
 START GROUP
@@ -2704,7 +2704,7 @@ LOAD linker stubs
  .ARM.attributes
                 0x000007a8       0x2c libFreeRTOS.a(list.c.obj)
  .ARM.attributes
-                0x000007d4       0x22 C:\Users\JOSECA~1\AppData\Local\Temp\ccabMWUe.o
+                0x000007d4       0x22 C:\Users\JOSECA~1\AppData\Local\Temp\ccwKd3m8.o
  .ARM.attributes
                 0x000007f6       0x1e c:/progra~2/gnuarm~1/102020~1/bin/../lib/gcc/arm-none-eabi/10.2.1/thumb/v6-m/nofp\libgcc.a(_dvmd_tls.o)
  .ARM.attributes

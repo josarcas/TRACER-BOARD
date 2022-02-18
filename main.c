@@ -1181,6 +1181,7 @@ void draw_string_oled(char *str, uint8_t matrix[NUM_PAGES][PAGE_SIZE], uint8_t x
 	}
 
     refresh_oled(matrix);
+
 }
 
 void draw_char_oled(char str, uint8_t matrix[NUM_PAGES][PAGE_SIZE], uint8_t x, uint8_t y)

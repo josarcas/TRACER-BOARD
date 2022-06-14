@@ -28,6 +28,9 @@
 #include "semphr.h"
 #include "queue.h"
 
+#include "Inc/screen.h"
+#include "Inc/global_variables.h"
+
 /*DEFINES***********************************************************************************************************/
 //SYSTEM------------------------------------------------------------------------------------------------------------
 #define VERSION_APP        1.0
@@ -63,14 +66,6 @@
 #define I2C_DIR_1                 0x60
 #define I2C_DIR_2                 0x61
 #define I2C_DIR_MEM               0x60
-//I2C OLED.........................................................................................................
-#define I2C_DIR_OLED              60
-#define DISPLAY_ON_OLED           0xAF
-#define DISPLAY_OFF_OLED          0xAE
-#define PAGE_SIZE                 128
-#define NUM_PAGES                 8
-#define HEIGHT_OLED               64
-#define WITDTH_OLED               128
 
 //SPI----------------------------------------------------------------------------------------------------------------
 #define SPI_PORT                  spi0
@@ -115,184 +110,6 @@ typedef struct{
 
 }instruction_t;
 
-/*GLOBAL CONST*****************************************************************************************************/
-const static uint8_t table_code[96][6] ={
-		   {0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, // sp
-		   {0x00, 0x00, 0x00, 0x2f, 0x00, 0x00}, // !
-		   {0x00, 0x00, 0x07, 0x00, 0x07, 0x00}, // "
-		   {0x00, 0x14, 0x7f, 0x14, 0x7f, 0x14}, // #
-		   {0x00, 0x24, 0x2a, 0x7f, 0x2a, 0x12}, // $
-		   {0x00, 0x23, 0x13, 0x08, 0x64, 0x62}, // %
-		   {0x00, 0x36, 0x49, 0x55, 0x22, 0x50}, // &
-		   {0x00, 0x00, 0x05, 0x03, 0x00, 0x00}, // '
-		   {0x00, 0x00, 0x1c, 0x22, 0x41, 0x00}, // (
-		   {0x00, 0x00, 0x41, 0x22, 0x1c, 0x00}, // )
-		   {0x00, 0x14, 0x08, 0x3E, 0x08, 0x14}, // *
-		   {0x00, 0x08, 0x08, 0x3E, 0x08, 0x08}, // +
-		   {0x00, 0x00, 0x00, 0xA0, 0x60, 0x00}, // ,
-		   {0x00, 0x08, 0x08, 0x08, 0x08, 0x08}, // -
-		   {0x00, 0x00, 0x60, 0x60, 0x00, 0x00}, // .
-		   {0x00, 0x20, 0x10, 0x08, 0x04, 0x02}, // /
-		   {0x00, 0x3E, 0x51, 0x49, 0x45, 0x3E}, // 0
-		   {0x00, 0x00, 0x42, 0x7F, 0x40, 0x00}, // 1
-		   {0x00, 0x42, 0x61, 0x51, 0x49, 0x46}, // 2
-		   {0x00, 0x21, 0x41, 0x45, 0x4B, 0x31}, // 3
-		   {0x00, 0x18, 0x14, 0x12, 0x7F, 0x10}, // 4
-		   {0x00, 0x27, 0x45, 0x45, 0x45, 0x39}, // 5
-		   {0x00, 0x3C, 0x4A, 0x49, 0x49, 0x30}, // 6
-		   {0x00, 0x01, 0x71, 0x09, 0x05, 0x03}, // 7
-		   {0x00, 0x36, 0x49, 0x49, 0x49, 0x36}, // 8
-		   {0x00, 0x06, 0x49, 0x49, 0x29, 0x1E}, // 9
-		   {0x00, 0x00, 0x36, 0x36, 0x00, 0x00}, // :
-		   {0x00, 0x00, 0x56, 0x36, 0x00, 0x00}, // ;
-		   {0x00, 0x08, 0x14, 0x22, 0x41, 0x00}, // <
-		   {0x00, 0x14, 0x14, 0x14, 0x14, 0x14}, // =
-		   {0x00, 0x00, 0x41, 0x22, 0x14, 0x08}, // >
-		   {0x00, 0x02, 0x01, 0x51, 0x09, 0x06}, // ?
-		   {0x00, 0x32, 0x49, 0x59, 0x51, 0x3E}, // @
-		   {0x00, 0x7C, 0x12, 0x11, 0x12, 0x7C}, // A
-		   {0x00, 0x7F, 0x49, 0x49, 0x49, 0x36}, // B
-		   {0x00, 0x3E, 0x41, 0x41, 0x41, 0x22}, // C
-		   {0x00, 0x7F, 0x41, 0x41, 0x22, 0x1C}, // D
-		   {0x00, 0x7F, 0x49, 0x49, 0x49, 0x41}, // E
-		   {0x00, 0x7F, 0x09, 0x09, 0x09, 0x01}, // F
-		   {0x00, 0x3E, 0x41, 0x49, 0x49, 0x7A}, // G
-		   {0x00, 0x7F, 0x08, 0x08, 0x08, 0x7F}, // H
-		   {0x00, 0x00, 0x41, 0x7F, 0x41, 0x00}, // I
-		   {0x00, 0x20, 0x40, 0x41, 0x3F, 0x01}, // J
-		   {0x00, 0x7F, 0x08, 0x14, 0x22, 0x41}, // K
-		   {0x00, 0x7F, 0x40, 0x40, 0x40, 0x40}, // L
-		   {0x00, 0x7F, 0x02, 0x0C, 0x02, 0x7F}, // M
-		   {0x00, 0x7F, 0x04, 0x08, 0x10, 0x7F}, // N
-		   {0x00, 0x3E, 0x41, 0x41, 0x41, 0x3E}, // O
-		   {0x00, 0x7F, 0x09, 0x09, 0x09, 0x06}, // P
-		   {0x00, 0x3E, 0x41, 0x51, 0x21, 0x5E}, // Q
-		   {0x00, 0x7F, 0x09, 0x19, 0x29, 0x46}, // R
-		   {0x00, 0x46, 0x49, 0x49, 0x49, 0x31}, // S
-		   {0x00, 0x01, 0x01, 0x7F, 0x01, 0x01}, // T
-		   {0x00, 0x3F, 0x40, 0x40, 0x40, 0x3F}, // U
-		   {0x00, 0x1F, 0x20, 0x40, 0x20, 0x1F}, // V
-		   {0x00, 0x3F, 0x40, 0x38, 0x40, 0x3F}, // W
-		   {0x00, 0x63, 0x14, 0x08, 0x14, 0x63}, // X
-		   {0x00, 0x07, 0x08, 0x70, 0x08, 0x07}, // Y
-		   {0x00, 0x61, 0x51, 0x49, 0x45, 0x43}, // Z
-		   {0x00, 0x00, 0x7F, 0x41, 0x41, 0x00}, // [
-		   {0x00, 0x55, 0x2A, 0x55, 0x2A, 0x55}, // 55
-		   {0x00, 0x00, 0x41, 0x41, 0x7F, 0x00}, // ]
-		   {0x00, 0x04, 0x02, 0x01, 0x02, 0x04}, // ^
-		   {0x00, 0x40, 0x40, 0x40, 0x40, 0x40}, // _
-		   {0x00, 0x00, 0x01, 0x02, 0x04, 0x00}, // '
-		   {0x00, 0x20, 0x54, 0x54, 0x54, 0x78}, // a
-		   {0x00, 0x7F, 0x48, 0x44, 0x44, 0x38}, // b
-		   {0x00, 0x38, 0x44, 0x44, 0x44, 0x20}, // c
-		   {0x00, 0x38, 0x44, 0x44, 0x48, 0x7F}, // d
-		   {0x00, 0x38, 0x54, 0x54, 0x54, 0x18}, // e
-		   {0x00, 0x08, 0x7E, 0x09, 0x01, 0x02}, // f
-		   {0x00, 0x18, 0xA4, 0xA4, 0xA4, 0x7C}, // g
-		   {0x00, 0x7F, 0x08, 0x04, 0x04, 0x78}, // h
-		   {0x00, 0x00, 0x44, 0x7D, 0x40, 0x00}, // i
-		   {0x00, 0x40, 0x80, 0x84, 0x7D, 0x00}, // j
-		   {0x00, 0x7F, 0x10, 0x28, 0x44, 0x00}, // k
-		   {0x00, 0x00, 0x41, 0x7F, 0x40, 0x00}, // l
-		   {0x00, 0x7C, 0x04, 0x18, 0x04, 0x78}, // m
-		   {0x00, 0x7C, 0x08, 0x04, 0x04, 0x78}, // n
-		   {0x00, 0x38, 0x44, 0x44, 0x44, 0x38}, // o
-		   {0x00, 0xFC, 0x24, 0x24, 0x24, 0x18}, // p
-		   {0x00, 0x18, 0x24, 0x24, 0x18, 0xFC}, // q
-		   {0x00, 0x7C, 0x08, 0x04, 0x04, 0x08}, // r
-		   {0x00, 0x48, 0x54, 0x54, 0x54, 0x20}, // s
-		   {0x00, 0x04, 0x3F, 0x44, 0x40, 0x20}, // t
-		   {0x00, 0x3C, 0x40, 0x40, 0x20, 0x7C}, // u
-		   {0x00, 0x1C, 0x20, 0x40, 0x20, 0x1C}, // v
-		   {0x00, 0x3C, 0x40, 0x30, 0x40, 0x3C}, // w
-		   {0x00, 0x44, 0x28, 0x10, 0x28, 0x44}, // x
-		   {0x00, 0x1C, 0xA0, 0xA0, 0xA0, 0x7C}, // y
-		   {0x00, 0x44, 0x64, 0x54, 0x4C, 0x44}, // z
-		   {0x00, 0x00, 0x08, 0x77, 0x00, 0x00}, // {
-		   {0x00, 0x00, 0x00, 0x7F, 0x00, 0x00}, // |
-		   {0x00, 0x00, 0x77, 0x08, 0x00, 0x00}, // }
-		   {0x00, 0x10, 0x08, 0x10, 0x08, 0x00}, // ~
-		   {0x14, 0x14, 0x14, 0x14, 0x14, 0x14}  // horiz lines
-		 };
-
-const static uint8_t esimeico[518] =  { 0X00,0X00,0X00,0X00,0X00,0X00,
-0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
-0X00,0X00,0X00,0X00,0X00,0X01,0X01,0X02,0X01,0X00,0X00,0X00,0X00,0X00,0X07,0X04,
-0X04,0X06,0X00,0X00,0X00,0X00,0X00,0X01,0X02,0X00,0X01,0X00,0X00,0X00,0X00,0X00,
-0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
-0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X16,0X11,
-0X10,0X11,0X09,0X03,0X03,0XC3,0X1D,0X01,0X03,0X83,0X33,0X06,0X16,0X17,0X27,0X07,
-0X07,0X06,0X96,0X17,0X07,0X33,0XC3,0X03,0X01,0X1D,0XE2,0X02,0X03,0X0D,0X09,0X10,
-0X01,0X12,0X08,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
-0X00,0X00,0X00,0X03,0X0F,0X3F,0XFE,0XFE,0XFE,0XEE,0XEE,0XEE,0XEF,0XFE,0X10,0X13,
-0XAF,0XFF,0XFF,0XFF,0XEF,0XEF,0XEE,0XEF,0XEF,0XFF,0XEF,0X20,0X00,0XFF,0XFF,0XFF,
-0XFF,0X00,0X21,0XFF,0XFF,0XFF,0XFF,0X7F,0X9F,0X9F,0XFF,0XFF,0XFF,0XFF,0XFF,0XBF,
-0X13,0X01,0XFF,0XFF,0XFF,0XEE,0XEE,0XFE,0XEE,0XEE,0X6E,0X0E,0X02,0X00,0X00,0X00,
-0X00,0X00,0X70,0XF0,0XF0,0XF8,0X74,0X74,0X72,0X72,0X72,0X73,0XF0,0XFF,0XFC,0XC0,
-0X00,0XF3,0XF0,0XF0,0XF0,0XF8,0XF0,0XF3,0XFF,0XFF,0XFE,0XBC,0X3F,0XF6,0XF3,0XF1,
-0XF1,0X63,0X67,0XFE,0XFC,0XFC,0X3F,0XCF,0XE3,0XF0,0XC8,0X80,0XF0,0XF0,0XF7,0XF0,
-0XC0,0XF8,0XFF,0XF3,0XF3,0X72,0X72,0X72,0X74,0X74,0X78,0X70,0X70,0X70,0X00,0X00,
-0X00,0X00,0X00,0X00,0X00,0X1C,0X00,0X22,0XA2,0X02,0X40,0XE4,0X33,0XFC,0X3F,0X0F,
-0X0E,0XC7,0X0B,0X03,0X09,0X07,0X17,0XF3,0XFF,0XFF,0X78,0X0F,0XC7,0X3E,0X3B,0XE3,
-0XE3,0X33,0X1E,0X4F,0X0F,0X39,0XF7,0XFF,0XF3,0X13,0X07,0X09,0X03,0X0B,0XE7,0X06,
-0X0D,0X1F,0XFC,0XF3,0XE4,0X40,0X42,0XA2,0X22,0X22,0X1C,0X00,0X00,0X00,0X00,0X00,
-0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X0C,0X12,0X36,0X56,0X54,0X14,0X94,0XD0,
-0X73,0X32,0X12,0X90,0XD1,0XF0,0XE8,0XF4,0XFB,0XFF,0XFC,0XFC,0XBF,0X9F,0X1E,0X0E,
-0X0E,0X1E,0X9F,0XBB,0XFE,0XFC,0XFF,0XFF,0XF4,0XE8,0XF0,0XD0,0X90,0X12,0X32,0X73,
-0XF0,0X90,0X14,0XD4,0X56,0X36,0X32,0X1C,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
-0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X68,0X84,
-0X00,0X08,0X10,0X60,0X40,0X83,0X68,0X7E,0XFF,0X43,0XEF,0XE9,0X69,0XEB,0X76,0X3C,
-0X1C,0X76,0XEB,0XA9,0XE9,0XED,0X63,0XFF,0X7F,0X78,0X23,0X40,0X60,0X10,0X08,0X00,
-0X84,0X68,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
-0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
-0X00,0X00,0X00,0X00,0X00,0X80,0X40,0X40,0XC0,0X80,0XC0,0X80,0X80,0X00,0X60,0X00,
-0X00,0X60,0X00,0X80,0X80,0XC0,0X80,0XC0,0X40,0X40,0X80,0X00,0X00,0X00,0X00,0X00,
-0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
-};
-
-const static float IB_MEASSURE_VALUES[]={
-    766.798419,    383.3992095,    343.8735178,    300.3952569,    268.7747036,    233.201581,    213.4387352,
-    196.0474308,    180.2371542,    166.0079051,    154.1501976,    142.2924901,    133.5968379,    124.9011858,
-    117.7865613,    110.6719368,    105.1383399,    100.3952569,    94.86166008,    90.90909091,    86.95652174,
-    83.39920949,    79.84189723,    76.6798419,    73.51778656,    71.14624506,    68.77470356,    66.40316206,
-    64.03162055,    62.05533597,    60.07905138,    58.1027668,    56.52173913,    54.94071146,    53.55731225,
-    52.17391304,    50.59288538,    49.40711462,    48.22134387,    47.03557312,    45.84980237,    44.46640316,
-    43.47826087,    42.68774704,    41.69960474,    40.90909091,    39.92094862,    39.13043478,    38.33992095,
-    37.74703557,    37.1541502,    36.36363636,    35.77075099,    35.17786561,    34.38735178,    33.99209486,
-    33.39920949,    32.60869565,    32.21343874,    31.62055336,    31.22529644,    30.63241107,    30.23715415,
-    29.64426877,    29.24901186,    29.0513834,    28.45849802,    27.86561265,    27.47035573,    27.07509881,
-    26.87747036,    26.28458498,    26.08695652,    25.6916996,    25.49407115,    25.09881423,    24.70355731,
-    24.3083004,    24.11067194,    23.91304348,    23.275,    22.98765432,    22.70731707,    22.43373494,
-    22.16666667,    21.90588235,    21.65116279,    21.40229885,    21.15909091,    20.92134831,    20.68888889,
-    20.46153846,    20.23913043,    20.02150538,    19.80851064,    19.6,    19.39583333,    19.19587629,
-    19,    18.80808081,    18.62,    18.43564356,    18.25490196,    18.0776699,    17.90384615,    17.73333333,
-    17.56603774,    17.40186916,    17.24074074,    17.08256881,    16.92727273,    16.77477477,    16.625,
-    16.47787611,    16.33333333,    16.19130435,    16.05172414,    15.91452991,    15.77966102,    15.64705882,
-    15.51666667,    15.38842975,    15.26229508,    15.13821138,    15.01612903,    14.896,    14.77777778,
-    14.66141732,    14.546875,    14.43410853,    14.32307692,    14.21374046,    14.10606061,    14,
-    13.89552239,    13.79259259,    13.69117647,    13.59124088,    13.49275362,    13.39568345,    13.3,
-    13.20567376,    13.11267606,    13.02097902,    12.93055556,    12.84137931,    12.75342466,    12.66666667,
-    12.58108108,    12.4966443,    12.41333333,    12.33112583,    12.25,    12.16993464,    12.09090909,
-    12.01290323,    11.93589744,    11.85987261,    11.78481013,    11.71069182,    11.6375,    11.56521739,
-    11.49382716,    11.42331288,    11.35365854,    11.28484848,    11.21686747,    11.1497006,    11.08333333,
-    11.01775148,    10.95294118,    10.88888889,    10.8255814,    10.76300578,    10.70114943,    10.64,
-    10.57954545,    10.51977401,    10.46067416,    10.40223464,    10.34444444,    10.28729282,    10.23076923,
-    10.17486339,    10.11956522,    10.06486486,    10.01075269,    9.957219251,    9.904255319,    9.851851852,
-    9.8,    9.748691099,    9.697916667,    9.647668394,    9.597938144,    9.548717949,    9.5,    9.45177665,
-    9.404040404,    9.35678392,    9.31,    9.263681592,    9.217821782,    9.172413793,    9.12745098,    9.082926829,
-    9.038834951,    8.995169082,    8.951923077,    8.909090909,    8.866666667,    8.82464455,    8.783018868,
-    8.741784038,    8.700934579,    8.660465116,    8.62037037,    8.580645161,    8.541284404,    8.502283105,
-    8.463636364,    8.425339367,    8.387387387,    8.349775785,    8.3125,    8.275555556,    8.238938053,
-    8.202643172,    8.166666667,    8.131004367,    8.095652174,    8.060606061,    8.025862069,    7.991416309,
-    7.957264957,    7.923404255,    7.889830508,    7.856540084,    7.823529412,    7.790794979,    7.758333333,
-    7.726141079,    7.694214876,    7.66255144,    7.631147541,    7.6,    7.569105691,    7.538461538,    7.508064516,
-    7.477911647,    7.448,    7.418326693,    7.388888889,    7.359683794,    7.330708661,    7.301960784,
-    };
-
-
-
-
-
 /*GLOBAL VARIABLES*************************************************************************************************/
 //SYSTEM-----------------------------------------------------------------------------------------------------------
 curve_t type;
@@ -317,9 +134,6 @@ uint8_t resistor_value;
 //DMA-------------------------------------------------------------------------------------------------------------
 uint dma_ch;
 dma_channel_config dma_config;
-
-//OLED------------------------------------------------------------------------------------------------------------
-uint8_t screen[NUM_PAGES][PAGE_SIZE];
 
 //SEMAPHORES------------------------------------------------------------------------------------------------------
 //SemaphoreHandle_t serial_semphr = NULL;
@@ -379,20 +193,7 @@ void system_status_task(void *arg);
 void comprobe_connection_task(void *arg);
 void serial_receive_task(void *arg);
 void app_main_task(void *arg);
-
-//OLED------------------------------------------------------------------------------------------------------------
-void write_command_oled(uint8_t cmd);
-void write_data_oled(uint8_t data);
-void init_oled();
-void write_page_oled(uint8_t page, uint8_t *data, uint16_t len);
-void set_pixel_oled(uint8_t **matrix, uint8_t x, uint8_t y);
-void reset_pixel_oled(uint8_t **matrix, uint8_t x, uint8_t y);
-void refresh_oled(uint8_t matrix[NUM_PAGES][PAGE_SIZE]);
-void draw_string_oled(char *str, uint8_t matrix[NUM_PAGES][PAGE_SIZE], uint8_t x, uint8_t y);
-void draw_char_oled(char str, uint8_t matrix[NUM_PAGES][PAGE_SIZE], uint8_t x, uint8_t y);
-void clear_oled(uint8_t matrix[NUM_PAGES][PAGE_SIZE]);
-void draw_bitmap_oled(uint8_t matrix[NUM_PAGES][PAGE_SIZE], const uint8_t *bitmap, uint16_t size, uint8_t weigth, uint8_t x, uint8_t y);
-void init_screen();
+void gui_task(void *arg);
 
 /*---------------------------------------------MAIN FUNCTIION----------------------------------------------------*/
 int main()
@@ -405,7 +206,7 @@ int main()
 
     init_serial();
     init_i2c_bus();
-    init_screen();
+    //init_screen();
     check_i2c_devices();
     init_dac();
     init_adc();
@@ -425,7 +226,7 @@ int main()
     app_instruction_queue = xQueueCreate(2, sizeof(instruction_t));
 
     //CREATE TASK------------------------------------------------------------------------------------------------
-    xTaskCreate(&system_status_task, "system status", 1024, NULL, 1, NULL);
+    //xTaskCreate(&system_status_task, "system status", 1024, NULL, 1, NULL);
     xTaskCreate(&comprobe_connection_task, "comprobe con", 1024, NULL, 1, NULL);
     xTaskCreate(&serial_receive_task, "serial rx", 1024*2, NULL, 3, NULL);
     xTaskCreate(&app_main_task, "main app", 1024*2, NULL, 2, NULL);
@@ -457,6 +258,12 @@ bool i2c_check_response(uint8_t dir, uint32_t timeout)
     return false;
 }
 
+void debug(const char *format, ...)
+{
+    return;
+}
+
+/*
 void debug(const char *format, ...)
 {
     va_list args;
@@ -542,7 +349,7 @@ void debug(const char *format, ...)
  
     va_end(args);
 }
-
+*/
 
 bool start_probe()
 {
@@ -811,6 +618,7 @@ void init_dma()
 }
 
 //TASK------------------------------------------------------------------------------------------------------------
+/*
 void system_status_task(void *arg)
 {
     uint8_t status;
@@ -889,7 +697,7 @@ void system_status_task(void *arg)
         }
     }
 }
-
+*/
 void comprobe_connection_task(void *arg)
 {
     uint8_t status;
@@ -1024,6 +832,11 @@ void app_main_task(void *arg)
 
 }
 
+void gui_task(void *arg)
+{
+    oled_init();
+}
+
 //TIMER-----------------------------------------------------------------------------------------------------------
 bool timer1Callback(repeating_timer_t *timer)
 {
@@ -1084,180 +897,4 @@ bool timer2Callback(repeating_timer_t *timer)
 
     return true;
     
-}
-
-//OLED------------------------------------------------------------------------------------------------------------
-void write_command_oled(uint8_t cmd)
-{
-    uint8_t buffer[2] = {0x00, cmd};
-
-    i2c_write_blocking(I2C_PORT, I2C_DIR_OLED, buffer, 2, false);
-}
-
-void write_data_oled(uint8_t data)
-{
-    uint8_t buffer[2]={0x40, data};
-
-    i2c_write_blocking(I2C_PORT, I2C_DIR_OLED, buffer, 2, false);
-}
-
-void init_oled()
-{
-	write_command_oled(0xa8);
-	write_command_oled(0x3f);
-	write_command_oled(0xd3);
-	write_command_oled(0x00);
-	write_command_oled(0x40);
-	write_command_oled(0xa1);
-	write_command_oled(0xc8);
-	write_command_oled(0xad);
-	write_command_oled(0x02);
-	write_command_oled(0x81);
-	write_command_oled(0x7f);
-	write_command_oled(0xa4);
-	write_command_oled(0xa6);
-	write_command_oled(0xd5);
-	write_command_oled(0x80);
-	write_command_oled(0x8d);
-	write_command_oled(0x14);
-	write_command_oled(0xaf);
-
-}
-
-void write_page_oled(uint8_t page, uint8_t *data, uint16_t len)
-{
-    uint8_t buffer[len+1];
-
-    buffer[0] = 0x40;
-	for(uint8_t i=0; i<128; i++)
-		buffer[i+1] = data[i];
-
-	write_command_oled(0xb0 + page);
-	write_command_oled(0x00);
-	write_command_oled(0x10);
-
-    i2c_write_blocking(I2C_PORT, I2C_DIR_OLED, buffer, len+1, false);
-}
-
-void set_pixel_oled(uint8_t **matrix, uint8_t x, uint8_t y)
-{
-    matrix[y/NUM_PAGES][x] |= 0x01 << (y%8);
-    write_page_oled(y/NUM_PAGES, matrix[y/NUM_PAGES], PAGE_SIZE);
-}
-
-void reset_pixel_oled(uint8_t **matrix, uint8_t x, uint8_t y)
-{
-    matrix[y/NUM_PAGES][x] = matrix[y/NUM_PAGES][x] ^(matrix[y/NUM_PAGES][x] & (0x01<<y%8));
-    write_page_oled(y/NUM_PAGES, matrix[y/NUM_PAGES], PAGE_SIZE);
-}
-
-void refresh_oled(uint8_t matrix[NUM_PAGES][PAGE_SIZE])
-{
-    for(uint16_t i=0; i<NUM_PAGES; i++)
-        write_page_oled(i, matrix[i], PAGE_SIZE);
-}
-
-void draw_string_oled(char *str, uint8_t matrix[NUM_PAGES][PAGE_SIZE], uint8_t x, uint8_t y)
-{
-    uint8_t i=0;
-
-    while(str[i] != '\0')
-	{
-
-		for(uint8_t k=0; k<6; k++)
-		{
-			for(uint8_t j=0; j<8; j++)
-			{
-                if((table_code[str[i] -32][k]>>j & 0x01))
-                    matrix[(y+j)/NUM_PAGES][x+k] |= 0x01 << ((y+j)%8);
-                else
-                    matrix[(y+j)/NUM_PAGES][x+k] = matrix[(y+j)/NUM_PAGES][x+k]^(matrix[(y+j)/NUM_PAGES][x+k] & (0x01<<(y+j)%8));
-			}
-
-		}
-
-		x+=6;
-		i++;
-	}
-
-    refresh_oled(matrix);
-
-}
-
-void draw_char_oled(char str, uint8_t matrix[NUM_PAGES][PAGE_SIZE], uint8_t x, uint8_t y)
-{
-    for(uint8_t k=0; k<6; k++)
-    {
-        for(uint8_t j=0; j<8; j++)
-        {
-            if((table_code[str-32][k]>>j & 0x01))
-                matrix[(y+j)/NUM_PAGES][x+k] |= 0x01 << ((y+j)%8);
-            else
-                matrix[(y+j)/NUM_PAGES][x+k] = matrix[(y+j)/NUM_PAGES][x+k]^(matrix[(y+j)/NUM_PAGES][x+k] & (0x01<<(y+j)%8));
-        }
-
-    }
-
-    refresh_oled(matrix);
-}
-
-void clear_oled(uint8_t matrix[NUM_PAGES][PAGE_SIZE])
-{
-    for(uint8_t i=0; i<NUM_PAGES; i++)
-    {
-        for(uint8_t j=0; j<PAGE_SIZE;j++)
-          screen[i][j] = 0x00;
-    }
-    refresh_oled(screen);
-}
-
-uint8_t reverse(uint8_t b)
-{
-   b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
-   b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
-   b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
-   return b;
-}
-
-void draw_bitmap_oled(uint8_t matrix[NUM_PAGES][PAGE_SIZE], const uint8_t *bitmap, uint16_t size, uint8_t weigth, uint8_t x, uint8_t y)
-{
-   
-    uint8_t j=0;
-    uint16_t k=0;
-    while(k<size)
-    {
-        for(uint8_t i=0; i<=weigth; i++)
-        {
-            matrix[j][x+i]=reverse(bitmap[k]);
-            k++;
-        }
-        j++;
-    }
-
-    refresh_oled(matrix);
-    
-}
-
-void init_screen()
-{
-    if(i2c_check_response(I2C_DIR_OLED, 1000))
-    {
-        init_oled();
-        clear_oled(screen);
-        draw_bitmap_oled(screen, esimeico, 518, 64, 32, 0);
-        debug("\n\n\n\n\n\n\nV %f\n", VERSION_APP);
-        sleep_ms(2000);
-    }
-
-    else
-    {
-        while(1)
-        {
-            gpio_put(LED_STATUS, 1);
-            sleep_ms(1000);
-            gpio_put(LED_STATUS, 0);
-            sleep_ms(1000);
-        }
-    }
- 
 }

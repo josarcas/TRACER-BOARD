@@ -98,4 +98,6 @@ CMakeFiles\main.dir\main.c.obj: \
  C\:\Users\JoseCarlos\Desktop\Sistema\TrazadorOS\FreeRTOS-Kernel\include/semphr.h \
  C\:\Users\JoseCarlos\Desktop\Sistema\TrazadorOS\FreeRTOS-Kernel\include/queue.h \
  C\:\Users\JoseCarlos\Desktop\Sistema\TrazadorOS\FreeRTOS-Kernel\include/task.h \
- C\:\Users\JoseCarlos\Desktop\Sistema\TrazadorOS\FreeRTOS-Kernel\include/queue.h
+ C\:\Users\JoseCarlos\Desktop\Sistema\TrazadorOS\FreeRTOS-Kernel\include/queue.h \
+ C\:\Users\JoseCarlos\Desktop\Sistema\TrazadorOS\Inc/screen.h \
+ C\:\Users\JoseCarlos\Desktop\Sistema\TrazadorOS\Inc/global_variables.h

@@ -71,6 +71,6 @@ void oled_reset_pixel(uint8_t x, uint8_t y);
 void oled_clear();
 void oled_draw_string(char *str, uint8_t x, uint8_t y);
 void oled_draw_bitmap(const uint8_t bitmap, uint8_t x, uint8_t y, uint8_t width, uint16_t size);
-
+void oled_draw_rect(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
 
 #endif

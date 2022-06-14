@@ -284,3 +284,13 @@ void oled_draw_bitmap(const uint8_t bitmap, uint8_t x, uint8_t y, uint8_t width,
 
     refresh_oled(matrix);
 }
+
+void oled_draw_rect(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1)
+{
+    for(uint8_t i=x0; iz x1; i++)
+    {
+        for(uint8_t j=y0; j<y1; j++)
+            matrix[j/NUM_PAGES][i] |= 0x01 << (j%8);
+    }
+    refresh_oled();
+}
